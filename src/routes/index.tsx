@@ -87,6 +87,67 @@ function Logo() {
   );
 }
 
+const EVENT_DATE = new Date("2026-05-16T10:00:00+01:00").getTime();
+
+function useCountdown(target: number) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const diff = Math.max(0, target - now);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff / 3600000) % 24);
+  const minutes = Math.floor((diff / 60000) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return { days, hours, minutes, seconds, done: diff === 0 };
+}
+
+function CountdownUnit({ value, label }: { value: number; label: string }) {
+  const display = String(value).padStart(2, "0");
+  return (
+    <div className="group relative flex flex-col items-center">
+      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-deep/60 backdrop-blur-md px-4 py-5 shadow-gold transition-all duration-500 group-hover:border-gold group-hover:scale-105 sm:px-7 sm:py-6">
+        <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden />
+        <div key={display} className="font-display text-4xl font-black tabular-nums text-gold sm:text-6xl animate-fade-up">
+          {display}
+        </div>
+      </div>
+      <div className="mt-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground sm:text-xs">
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function Countdown() {
+  const { days, hours, minutes, seconds, done } = useCountdown(EVENT_DATE);
+  return (
+    <section className="relative overflow-hidden border-y border-border/50 bg-gradient-to-b from-background via-deep to-background py-16 sm:py-20">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[800px] rounded-full opacity-20 blur-3xl" style={{ background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)" }} aria-hidden />
+      <div className="relative mx-auto max-w-5xl px-6 text-center lg:px-12">
+        <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-1.5 text-xs uppercase tracking-[0.3em] text-gold">
+          <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+          Compte à rebours
+        </div>
+        <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl md:text-5xl">
+          {done ? (
+            <>L'événement <span className="italic text-gold">a commencé</span></>
+          ) : (
+            <>L'événement débute dans</>
+          )}
+        </h2>
+        <div className="mt-10 grid grid-cols-4 gap-3 sm:gap-6">
+          <CountdownUnit value={days} label="Jours" />
+          <CountdownUnit value={hours} label="Heures" />
+          <CountdownUnit value={minutes} label="Minutes" />
+          <CountdownUnit value={seconds} label="Secondes" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div>
@@ -247,6 +308,9 @@ function Index() {
           </div>
         </div>
       </section>
+
+      {/* Countdown */}
+      <Countdown />
 
       {/* About */}
       <section id="about" className="border-y border-border/50 bg-deep py-24">
