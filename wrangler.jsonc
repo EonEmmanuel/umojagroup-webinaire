@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "umojagroup-webinaire",
-  "main": "dist/server/index.js",
+  "main": "dist/umojagroup_webinaire/index.js",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": [
     "nodejs_compat"
