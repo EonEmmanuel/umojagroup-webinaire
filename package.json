@@ -8,7 +8,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run vite dev",
-    "build": "bun run vite build && bun run postbuild",
+    "build": "bun run prebuild && bun run vite build && bun run postbuild",
+    "prebuild": "bun run ./scripts/prebuild.js",
     "postbuild": "bun run ./scripts/postbuild.js",
     "build:dev": "bun run vite build --mode development",
     "preview": "bun run vite preview",
