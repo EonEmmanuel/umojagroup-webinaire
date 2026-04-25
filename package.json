@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run vite dev",
-    "build": "bun run vite build",
+    "build": "mkdir -p dist/server && touch dist/server/index.js && bun run vite build",
     "build:dev": "bun run vite build --mode development",
     "preview": "bun run vite preview",
     "lint": "bun run eslint .",
